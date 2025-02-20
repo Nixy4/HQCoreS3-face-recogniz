@@ -1,0 +1,22 @@
+
+# 忽略编译输出目录
+build/
+
+# 忽略VSCode配置文件
+.vscode/
+
+# 忽略ESP-IDF环境文件
+*.pyc
+*.elf
+*.bin
+*.map
+
+# 忽略NVS分区文件
+nvs_partition.bin
+
+# 忽略日志文件
+*.log
+
+# 忽略临时文件
+*.tmp
+*.swp
