@@ -137,6 +137,7 @@ void wifi_init_sta()
 void fr_wifi_init()
 {
   wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+
   wifi_mode_t mode = WIFI_MODE_NULL;
 
   if(strlen(FR_WIFI_AP_SSID) && strlen(FR_WIFI_STA_SSID)) {

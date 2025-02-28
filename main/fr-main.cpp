@@ -465,6 +465,7 @@ static void bep_recog()
   {
     //绘制检测结果
     draw_detection_result((uint16_t *)frame->buf, frame->height, frame->width, detect_results);
+    
     if(xTaskGetTickCount()-recog_last_tick>FR_RECOG_INTERVAL) //识别间隔大于1秒钟才��别
     {
       //识别图像,获取结果

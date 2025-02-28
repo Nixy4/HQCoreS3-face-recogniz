@@ -1,5 +1,5 @@
 cmake_file=./CMakeLists.txt
-windir=/mnt/d/ESP/flash_download_tool/flash_download_tool_3.9.7/temp
+windir=/mnt/d/ESP/flash_download_tool/temp
 
 target=$(grep -E "^project\(" "$cmake_file" | sed -E 's/project\(([^)]+)\)/\1/')
 target=$(echo $target | tr -d '\r')
