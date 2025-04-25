@@ -1,46 +1,41 @@
-cmake_file=./CMakeLists.txt
+cmakefile=./CMakeLists.txt
 windir=/mnt/d/ESP/flash_download_tool/temp
-
-target=$(grep -E "^project\(" "$cmake_file" | sed -E 's/project\(([^)]+)\)/\1/')
-target=$(echo $target | tr -d '\r')
 builddir=./build
-bootloader=${builddir}/bootloader/bootloader.bin # 0x0000
-partition=${builddir}/partition_table/partition-table.bin # 0x8000
-ota_data=${builddir}/ota_data_initial.bin # 0xD000
-model=${builddir}/srmodels/srmodels.bin # 0x10000
-main=${builddir}/${target}.bin # 0x410000
-storage=${builddir}/storage.bin # 0xC10000
 
+#! 清空windows端目标文件夹
 rm -f ${windir}/**.bin
 echo 目标文件夹: ${windir} 已清空
 
-if [ -f $bootloader ]; then
-  echo 已复制 bootloader
-  cp $bootloader ${windir}/bootloader.bin
-fi
+#! 提取项目名称
+target=$(grep -E "^project\(" "$cmakefile" | sed -E 's/project\(([^)]+)\)/\1/')
+target=$(echo $target | tr -d '\r')
+echo 项目名称: $target
 
-if [ -f $partition ]; then
-  echo 已复制 partition-table
-  cp $partition ${windir}/partition-table.bin
-fi
+#! 从第二行开始计算行数
+lines=$(awk 'NR>1 {print $0}' $builddir/flash_args | wc -l)
+echo 镜像文件数量: $lines
 
-if [ -f $ota_data ]; then
-  echo 已复制 ota_data
-  cp $ota_data ${windir}/ota_data_initial.bin
-fi
+#! 从第二行开始读取第一列参数
+addrargs=$(awk 'NR>1 {print $1}' $builddir/flash_args)
 
-if [ -f $model ]; then
-  echo 已复制 model
-  cp $model ${windir}/srmodels.bin
-fi
+#! 从第二行开始, 读取第二列参数
+fileargs=$(awk 'NR>1 {print $2}' $builddir/flash_args)
 
-if [ -f $main ]; then
-  echo 已复制 main
-  cp $main ${windir}/main.bin
-fi
-
-if [ -f $storage ]; then
-  echo 已复制 storage
-  cp $storage ${windir}/storage.bin
-fi
-
+#! 读取每一行的参数,并复制到windows端
+for i in $(seq 1 $lines)
+do
+  addr=$(echo $addrargs | awk -v i=$i '{print $i}')
+  file=$(echo $fileargs | awk -v i=$i '{print $i}')
+  filename=$(basename "$file")
+  if [ "$filename" = "$target.bin" ];then
+    wfilename="main.bin"
+  else
+    wfilename=$filename
+  fi
+  filepath=${builddir}/${file}
+  wfilepath=${windir}/${wfilename}
+  if [ -f $filepath ]; then
+    cp $filepath ${wfilepath}
+    printf "| %-20s >> %-20s : %-10s\n" $filename $wfilename $addr
+  fi
+done
