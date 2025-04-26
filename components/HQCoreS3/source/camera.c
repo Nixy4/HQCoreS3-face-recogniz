@@ -16,7 +16,7 @@ int bsp_cam_init(const camera_config_t* ccfg_cam)
     return -1;
 	} else {
 		sensor_t *s = esp_camera_sensor_get();
-		s->set_vflip(s, 1);
+		s->set_vflip(s, 0);
 		s->set_hmirror(s, 0);
 		ESP_LOGI(TAG, "Camera Init Success");
     return 0;

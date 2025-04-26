@@ -1,6 +1,6 @@
 #pragma once
 
-#define FR_WIFI_AP_SSID         "ESP32-FR-WIFI"
+#define FR_WIFI_AP_SSID         "ESP32-FR-WIFI-NIXY" //!自己改一下名称,不要加特殊符号和空格
 #define FR_WIFI_AP_PSWD         "88888888"
 #define FR_WIFI_AP_CHANNEL      ""
 #define FR_WIFI_STA_SSID        ""
